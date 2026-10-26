@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chronos | Calendar & Date Calculator</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body data-theme="dark">
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="4" rx="3"></rect>
+            <path d="M16 2v4"></path>
+            <path d="M8 2v4"></path>
+            <path d="M3 10h18"></path>
+            <circle cx="8" cy="15" r="1"></circle>
+            <circle cx="12" cy="15" r="1"></circle>
+            <circle cx="16" cy="15" r="1"></circle>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>Chronos</h1>
+          <span>Calendar & Date Calculator</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-item active" data-tab="tab-month">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+          <span>Month Calendar</span>
+        </button>
+        <button class="nav-item" data-tab="tab-year">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
+          <span>Full Year View</span>
+        </button>
+        <button class="nav-item" data-tab="tab-diff">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5"></path><path d="M8 21H3v-5"></path><path d="M21 3 9 15"></path><path d="m15 9-6 6"></path><path d="m3 21 6-6"></path></svg>
+          <span>Date Difference</span>
+        </button>
+        <button class="nav-item" data-tab="tab-math">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8"></path><path d="M8 12h8"></path></svg>
+          <span>Add / Subtract Days</span>
+        </button>
+        <button class="nav-item" data-tab="tab-age">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+          <span>Age & Milestones</span>
+        </button>
+        <button class="nav-item" data-tab="tab-leap">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 14 4-4"></path><path d="M3.34 19a10 10 0 1 1 17.32 0"></path></svg>
+          <span>Leap Year Checker</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="live-clock">
+          <span class="clock-label">Local Time</span>
+          <div id="liveClockTime" class="clock-time">--:--:--</div>
+          <div id="liveClockDate" class="clock-date">---</div>
+        </div>
+
+        <button id="themeToggleBtn" class="theme-toggle" title="Toggle Light/Dark Theme">
+          <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+          <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+          <span id="themeToggleLabel">Light Mode</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Quick Header -->
+      <header class="top-bar">
+        <div class="page-title">
+          <h2 id="currentTabTitle">Month Calendar</h2>
+          <p id="currentTabSubtitle">Explore interactive monthly calendar grids and dates</p>
+        </div>
+        <div class="top-actions">
+          <button id="quickTodayBtn" class="btn btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+            Jump to Today
+          </button>
+        </div>
+      </header>
+
+      <!-- TAB 1: MONTH CALENDAR -->
+      <section id="tab-month" class="tab-pane active">
+        <div class="calendar-wrapper">
+          <div class="calendar-controls card">
+            <div class="month-nav">
+              <button id="prevMonthBtn" class="icon-btn" title="Previous Month">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              </button>
+              
+              <div class="selector-group">
+                <select id="monthSelect" class="form-select"></select>
+                <input type="number" id="yearInput" class="form-input year-input" min="1" max="9999" value="2026">
+              </div>
+
+              <button id="nextMonthBtn" class="icon-btn" title="Next Month">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+            </div>
+
+            <div class="calendar-meta-pills">
+              <span id="monthTotalDaysPill" class="pill pill-info">31 Days</span>
+              <span id="monthLeapPill" class="pill pill-accent">Common Year</span>
+              <span id="monthStartWeekdayPill" class="pill pill-neutral">Starts on Sunday</span>
+            </div>
+          </div>
+
+          <div class="calendar-card card">
+            <div class="calendar-grid-header">
+              <span class="col-head weekend">Sun</span>
+              <span class="col-head">Mon</span>
+              <span class="col-head">Tue</span>
+              <span class="col-head">Wed</span>
+              <span class="col-head">Thu</span>
+              <span class="col-head">Fri</span>
+              <span class="col-head weekend">Sat</span>
+            </div>
+            <div id="calendarGridDays" class="calendar-grid-days"></div>
+          </div>
+
+          <!-- Date Detail Drawer -->
+          <div id="dateDetailsCard" class="card detail-drawer">
+            <div class="drawer-header">
+              <div class="drawer-date-badge">
+                <span id="detailDayNumber">26</span>
+                <span id="detailMonthYear">Oct 2026</span>
+              </div>
+              <div class="drawer-info">
+                <h4 id="detailFullDate">Monday, October 26, 2026</h4>
+                <p id="detailSubtitle">Day 299 of 365 in 2026</p>
+              </div>
+            </div>
+            <div class="drawer-stats">
+              <div class="stat-item">
+                <span class="stat-label">Day of Week</span>
+                <span id="detailWeekday" class="stat-value highlight">Monday</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Week Number</span>
+                <span id="detailWeekNum" class="stat-value">Week 44</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Days Left in Year</span>
+                <span id="detailDaysLeft" class="stat-value">66 days</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Year Progress</span>
+                <span id="detailYearPct" class="stat-value">81.9%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: FULL YEAR VIEW -->
+      <section id="tab-year" class="tab-pane">
+        <div class="card year-control-bar">
+          <div class="year-selector-box">
+            <label for="fullYearInput">Select Year:</label>
+            <div class="year-stepper">
+              <button id="prevYearBtn" class="icon-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+              <input type="number" id="fullYearInput" class="form-input year-input" min="1" max="9999" value="2026">
+              <button id="nextYearBtn" class="icon-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+            </div>
+          </div>
+
+          <div class="year-stats-strip">
+            <div class="strip-item"><span class="strip-label">Leap Year:</span><strong id="yearSummaryLeap">No (365 days)</strong></div>
+            <div class="strip-item"><span class="strip-label">First Day:</span><strong id="yearSummaryFirstDay">Thursday</strong></div>
+            <div class="strip-item"><span class="strip-label">Last Day:</span><strong id="yearSummaryLastDay">Thursday</strong></div>
+            <div class="strip-item"><span class="strip-label">Weeks:</span><strong id="yearSummaryWeeks">52 Weeks</strong></div>
+          </div>
+
+          <button id="printCalendarBtn" class="btn btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect width="12" height="8" x="6" y="14"></rect></svg>
+            Print Calendar
+          </button>
+        </div>
+
+        <div id="fullYearGridContainer" class="year-grid-12"></div>
+      </section>
+
+      <!-- TAB 3: DATE DIFFERENCE -->
+      <section id="tab-diff" class="tab-pane">
+        <div class="grid-2col">
+          <div class="card form-card">
+            <h3 class="card-title">Select Dates</h3>
+            <p class="card-desc">Calculate exact span, working days, and weekends between two dates.</p>
+
+            <div class="form-group">
+              <label for="diffStartDate">Start Date</label>
+              <input type="date" id="diffStartDate" class="form-input">
+            </div>
+
+            <div class="form-group">
+              <label for="diffEndDate">End Date</label>
+              <input type="date" id="diffEndDate" class="form-input">
+            </div>
+
+            <div class="form-actions">
+              <button id="calculateDiffBtn" class="btn btn-primary">Calculate Difference</button>
+              <button id="swapDiffDatesBtn" class="btn btn-secondary" title="Swap Dates">⇄ Swap</button>
+            </div>
+          </div>
+
+          <div class="card results-card">
+            <h3 class="card-title">Duration Breakdown</h3>
+            <div class="hero-result">
+              <div class="hero-number" id="diffTotalDays">0</div>
+              <div class="hero-unit">Total Days Difference</div>
+            </div>
+
+            <div class="stats-matrix">
+              <div class="matrix-card">
+                <span class="m-label">Human Breakdown</span>
+                <strong class="m-val highlight" id="diffHumanBreakdown">0 years, 0 months, 0 days</strong>
+              </div>
+              <div class="matrix-card">
+                <span class="m-label">Inclusive Count</span>
+                <strong class="m-val" id="diffInclusiveDays">0 days</strong>
+              </div>
+              <div class="matrix-card">
+                <span class="m-label">Business Days (Mon-Fri)</span>
+                <strong class="m-val accent-green" id="diffBusinessDays">0 days</strong>
+              </div>
+              <div class="matrix-card">
+                <span class="m-label">Weekend Days (Sat-Sun)</span>
+                <strong class="m-val accent-orange" id="diffWeekendDays">0 days</strong>
+              </div>
+              <div class="matrix-card">
+                <span class="m-label">Weeks & Days</span>
+                <strong class="m-val" id="diffWeeksAndDays">0 weeks, 0 days</strong>
+              </div>
+              <div class="matrix-card">
+                <span class="m-label">Equivalent Hours</span>
+                <strong class="m-val" id="diffTotalHours">0 hours</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: ADD / SUBTRACT DAYS -->
+      <section id="tab-math" class="tab-pane">
+        <div class="grid-2col">
+          <div class="card form-card">
+            <h3 class="card-title">Date Arithmetic</h3>
+            <p class="card-desc">Add or subtract days, weeks, months, or years from any date.</p>
+
+            <div class="form-group">
+              <label for="mathBaseDate">Starting Date</label>
+              <input type="date" id="mathBaseDate" class="form-input">
+            </div>
+
+            <div class="form-group">
+              <label>Operation</label>
+              <div class="toggle-buttons">
+                <button type="button" class="toggle-btn active" data-op="add">+ Add</button>
+                <button type="button" class="toggle-btn" data-op="sub">− Subtract</button>
+              </div>
+            </div>
+
+            <div class="form-row-multi">
+              <div class="form-group">
+                <label for="mathYears">Years</label>
+                <input type="number" id="mathYears" class="form-input" min="0" value="0">
+              </div>
+              <div class="form-group">
+                <label for="mathMonths">Months</label>
+                <input type="number" id="mathMonths" class="form-input" min="0" value="0">
+              </div>
+              <div class="form-group">
+                <label for="mathWeeks">Weeks</label>
+                <input type="number" id="mathWeeks" class="form-input" min="0" value="0">
+              </div>
+              <div class="form-group">
+                <label for="mathDays">Days</label>
+                <input type="number" id="mathDays" class="form-input" min="0" value="30">
+              </div>
+            </div>
+
+            <div class="quick-presets">
+              <span class="preset-label">Quick Presets:</span>
+              <button class="chip" data-preset-days="7">+1 Week</button>
+              <button class="chip" data-preset-days="30">+30 Days</button>
+              <button class="chip" data-preset-days="90">+90 Days</button>
+              <button class="chip" data-preset-days="180">+180 Days</button>
+              <button class="chip" data-preset-days="365">+1 Year</button>
+            </div>
+          </div>
+
+          <div class="card results-card">
+            <h3 class="card-title">Calculated Result</h3>
+            <div class="hero-result">
+              <div class="hero-date" id="mathResultDate">---</div>
+              <div class="hero-weekday" id="mathResultWeekday">---</div>
+            </div>
+
+            <div class="details-list">
+              <div class="detail-row">
+                <span>Operation Applied:</span>
+                <strong id="mathOpSummary">+30 days</strong>
+              </div>
+              <div class="detail-row">
+                <span>Day of the Year:</span>
+                <strong id="mathDayOfYear">Day --</strong>
+              </div>
+              <div class="detail-row">
+                <span>Week of the Year:</span>
+                <strong id="mathWeekOfYear">Week --</strong>
+              </div>
+              <div class="detail-row">
+                <span>Is Leap Year?</span>
+                <strong id="mathIsLeap">--</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: AGE & MILESTONES -->
+      <section id="tab-age" class="tab-pane">
+        <div class="grid-2col">
+          <div class="card form-card">
+            <h3 class="card-title">Age & Life Milestones</h3>
+            <p class="card-desc">Calculate exact age, next birthday countdown, and fun life statistics.</p>
+
+            <div class="form-group">
+              <label for="ageBirthDate">Date of Birth</label>
+              <input type="date" id="ageBirthDate" class="form-input" value="2000-01-01">
+            </div>
+
+            <div class="form-group">
+              <label for="ageTargetDate">Calculate Age At Date</label>
+              <input type="date" id="ageTargetDate" class="form-input">
+            </div>
+
+            <div class="birthday-countdown-card">
+              <div class="countdown-title">🎉 Next Birthday In:</div>
+              <div class="countdown-digits">
+                <div class="c-unit"><span id="bdayDays">0</span><small>Days</small></div>
+                <div class="c-unit"><span id="bdayHours">0</span><small>Hours</small></div>
+                <div class="c-unit"><span id="bdayMinutes">0</span><small>Mins</small></div>
+                <div class="c-unit"><span id="bdaySeconds">0</span><small>Secs</small></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card results-card">
+            <h3 class="card-title">Your Life in Numbers</h3>
+            <div class="hero-result">
+              <div class="hero-age" id="ageExactBreakdown">0 Years, 0 Months, 0 Days</div>
+              <div class="hero-unit">Exact Current Age</div>
+            </div>
+
+            <div class="milestones-grid">
+              <div class="milestone-box">
+                <span class="m-icon">📅</span>
+                <strong id="ageTotalDays">0</strong>
+                <span>Total Days Lived</span>
+              </div>
+              <div class="milestone-box">
+                <span class="m-icon">⏰</span>
+                <strong id="ageTotalHours">0</strong>
+                <span>Hours of Life</span>
+              </div>
+              <div class="milestone-box">
+                <span class="m-icon">❤️</span>
+                <strong id="ageHeartbeats">0</strong>
+                <span>Approx. Heartbeats (~80 bpm)</span>
+              </div>
+              <div class="milestone-box">
+                <span class="m-icon">🫁</span>
+                <strong id="ageBreaths">0</strong>
+                <span>Approx. Breaths (~16 bpm)</span>
+              </div>
+              <div class="milestone-box">
+                <span class="m-icon">😴</span>
+                <strong id="ageSleepingHours">0</strong>
+                <span>Hours Spent Sleeping (~8 hrs/day)</span>
+              </div>
+              <div class="milestone-box">
+                <span class="m-icon">🌟</span>
+                <strong id="ageBornDay">---</strong>
+                <span>Day You Were Born</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 6: LEAP YEAR CHECKER -->
+      <section id="tab-leap" class="tab-pane">
+        <div class="card leap-checker-card">
+          <div class="leap-hero">
+            <div class="leap-input-wrap">
+              <label for="leapYearInput">Enter Any Gregorian Year:</label>
+              <div class="leap-input-box">
+                <input type="number" id="leapYearInput" class="form-input leap-input" min="1" max="9999" value="2026">
+                <button id="leapCheckBtn" class="btn btn-primary">Check Year</button>
+              </div>
+            </div>
+            
+            <div id="leapResultBadge" class="leap-result-badge common">
+              <span id="leapBadgeTitle">Not a Leap Year</span>
+              <small id="leapBadgeSubtitle">2026 has 365 days & February has 28 days</small>
+            </div>
+          </div>
+
+          <h4 class="subhead">Gregorian Leap Year Rules Verification</h4>
+          <div class="rules-flow">
+            <div id="ruleDiv4" class="rule-card">
+              <div class="rule-icon">1</div>
+              <div class="rule-body">
+                <strong>Divisible by 4?</strong>
+                <p id="ruleText4">2026 ÷ 4 = 506 remainder 2 (False)</p>
+              </div>
+              <div id="ruleStatus4" class="rule-status fail">✕</div>
+            </div>
+
+            <div id="ruleDiv100" class="rule-card">
+              <div class="rule-icon">2</div>
+              <div class="rule-body">
+                <strong>Century Year (Divisible by 100)?</strong>
+                <p id="ruleText100">2026 ÷ 100 = 20 remainder 26 (Not a century)</p>
+              </div>
+              <div id="ruleStatus100" class="rule-status neutral">—</div>
+            </div>
+
+            <div id="ruleDiv400" class="rule-card">
+              <div class="rule-icon">3</div>
+              <div class="rule-body">
+                <strong>400-Year Exception (Divisible by 400)?</strong>
+                <p id="ruleText400">Century rule applies only to century years</p>
+              </div>
+              <div id="ruleStatus400" class="rule-status neutral">—</div>
+            </div>
+          </div>
+
+          <div class="nearby-leap-years">
+            <h4>Nearest Leap Years</h4>
+            <div id="nearbyLeapContainer" class="chip-row"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toastNotification" class="toast">Action completed!</div>
+
+  <script src="app.js"></script>
+</body>
+</html>
